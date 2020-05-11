@@ -98,6 +98,16 @@ class Hello_World extends Widget_Base {
 			]
 		);
 
+		$this->add_control(
+			'hide_empty',
+			[
+				'label' => __( 'Hide empty', 'elementor-pro' ),
+				'type' => Controls_Manager::SWITCHER,
+				'default' => 'yes',
+				'frontend_available' => true,
+			]
+		);
+
 		$this->end_controls_section();
 
 		$this->start_controls_section(
@@ -494,11 +504,15 @@ class Hello_World extends Widget_Base {
 
 		$taxo_name = $term->taxonomy;
 
+		$hide_empty = false;
+		if ($settings['hide_empty']=='yes')
+			$hide_empty = true;
+
 		$kids = get_terms( $taxo_name, array(
 			'parent' => $curr_id,
 			'order' => $settings['order'],
 			'orderby' => $settings['orderby'],
-			'hide_empty' => true,
+			'hide_empty' => $hide_empty,
 			'number' => $settings['number']
 		));
 		if (is_array($kids) && $kids) {
@@ -522,7 +536,7 @@ class Hello_World extends Widget_Base {
 				echo '<a href="' . get_term_link($child) . '"' . $bg_image . '>';
 					echo '<div>';
 					echo '<div>';
-						if ($settings['display_count']=='yes') {
+						if ($settings['display_count']=='yes' && $child->count) {
 							echo '<div class="ele-subcats__count">' . $child->count . ' ' . $settings['txt_count'] . '</div>';
 						}
 						echo '<' . $settings['header_size'] . ' class="ele-subcats__title">' . $child->name . '</' . $settings['header_size'] . '>';
