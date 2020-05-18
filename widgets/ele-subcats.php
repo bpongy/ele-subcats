@@ -556,3 +556,21 @@ class Hello_World extends Widget_Base {
 	}
 	protected function _content_template() {}
 }
+
+
+
+// child_posts
+add_action( 'elementor/query/child_posts', function( $query ) {
+
+	$curr_term = get_queried_object();
+	if ($curr_term) {
+		$query->set('tax_query', array(
+			array(
+				'taxonomy' => $curr_term->taxonomy,
+				'field' => 'id',
+				'include_children' => false,
+				'terms' => $curr_term->term_id
+			)
+		));
+	}
+} );
