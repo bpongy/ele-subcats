@@ -3,7 +3,7 @@
  * Plugin Name: Elementor Sub Categories
  * Description: Elementor widget for subcategories
  * Plugin URI: https://www.redpik.net/
- * Version: 0.0.3
+ * Version: 0.0.4
  * Author: Benjamin PONGY
  * Author URI: https://www.redpik.net/
  */

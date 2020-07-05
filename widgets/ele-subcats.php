@@ -80,7 +80,8 @@ class Hello_World extends Widget_Base {
 				'options' => [
 					'name' => __( 'Name', 'elementor-pro' ),
 					'slug' => __( 'Slug', 'elementor-pro' ),
-					'count' => __( 'Count', 'elementor-pro' ),
+					'count' => 'Compteur',
+					'number' => 'N° position',
 				],
 			]
 		);
@@ -516,12 +517,30 @@ class Hello_World extends Widget_Base {
 			'number' => $settings['number']
 		));
 		if (is_array($kids) && $kids) {
+
+			// cas particulier : order by champ ACF
+			if ($settings['orderby']=='number') {
+
+				$kids_temp = array();
+				foreach ($kids as $child) {
+					$num = get_field( 'order', $child );
+					$k = str_pad($num, 10, '0', STR_PAD_LEFT) . '_' . $child->term_id;
+					$kids_temp[$k] = $child;
+				}
+				if ($settings['order']=='asc')
+					ksort( $kids_temp );
+				if ($settings['order']=='desc')
+					krsort( $kids_temp );
+
+				$kids = $kids_temp;
+			}
+
 			echo '<div class="elementor-grid">';
 			foreach ($kids as $child) {
 
 				$bg_image = '';
 				$bg_url = '';
-				$acf_bg = get_field('thumbnail', $taxo_name . '_' . $child->term_id);
+				$acf_bg = get_field($settings['thumbnail_slug'], $taxo_name . '_' . $child->term_id);
 				if (is_array($acf_bg)) {
 					$bg_url = $acf_bg['sizes'][$settings['image_size']];
 				}
